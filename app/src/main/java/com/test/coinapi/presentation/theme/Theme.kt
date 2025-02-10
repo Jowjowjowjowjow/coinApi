@@ -1,4 +1,4 @@
-package com.test.coinapi.ui.theme
+package com.test.coinapi.presentation.theme
 
 import android.app.Activity
 import android.os.Build

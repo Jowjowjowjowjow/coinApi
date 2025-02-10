@@ -1,4 +1,4 @@
-package com.test.coinapi.ui.theme
+package com.test.coinapi.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

@@ -1,7 +1,31 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
+}
+val localPropertiesFile by lazy {
+    rootProject.file("local.properties")
+}
+
+fun loadProperties(file: File): Properties {
+    val properties = Properties()
+    if (file.exists()) {
+        file.inputStream().use { properties.load(it) }
+    }
+    return properties
+}
+
+val localProperties by lazy {
+    loadProperties(localPropertiesFile)
+}
+
+val coinApiToken: String by lazy {
+    localProperties.getProperty(
+        "coinApiToken"
+    )
 }
 
 android {
@@ -16,6 +40,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "COIN_API_TOKEN", "\"${coinApiToken}\"")
     }
 
     buildTypes {
@@ -28,14 +54,15 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -49,6 +76,12 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.koin.android)
+    implementation(libs.koin.compose)
+    implementation(libs.koin.compose.navigation)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter)
+    implementation(libs.kotlin.json.serialization)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

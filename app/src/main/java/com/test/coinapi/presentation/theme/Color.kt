@@ -1,4 +1,4 @@
-package com.test.coinapi.ui.theme
+package com.test.coinapi.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
