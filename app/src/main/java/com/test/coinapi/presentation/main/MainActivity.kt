@@ -1,104 +1,115 @@
 package com.test.coinapi.presentation.main
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.test.coinapi.R
 import com.test.coinapi.presentation.theme.CoinApiTheme
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class MainActivity : ComponentActivity() {
     private val viewModel: ExchangeViewModel by lazy { getViewModel() }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             LaunchedEffect(Unit, block = {
-                CoroutineScope(Dispatchers.IO).launch {
-                    viewModel.exchanges.collect { exchangeList ->
-                        exchangeList.forEach {
-                            Log.d("Exchange: ", it.toString())
-                        }
-                    }
-                }
-
-                CoroutineScope(Dispatchers.IO).launch {
-                    viewModel.error.collectLatest { error ->
-                        error.let {
-                            Log.d("Error: ", error.toString())
-                        }
-                    }
-                }
-
                 viewModel.getExchangeList()
             })
 
             val exchangesState by viewModel.exchanges.collectAsStateWithLifecycle()
-            exchangesState.forEach {
-                Log.d("Exchange: ", it.toString())
-            }
 
             val errorState by viewModel.error.collectAsStateWithLifecycle()
-            errorState.let {
-                Log.d("Error: ", it.toString())
-            }
+
             CoinApiTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { padding ->
-                    LazyColumn(modifier = Modifier.padding(padding),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        items(
-                            items = exchangesState
-                        ) { exchange ->
-                            Row(modifier = Modifier.background(MaterialTheme.colorScheme.outline)
-                                .padding(all = 1.dp)
-                                .background(MaterialTheme.colorScheme.background)
-                                .fillParentMaxWidth(0.9f)) {
-                                Column {
-                                    exchange.name?.let {
-                                        Text(
-                                            it,
-                                            modifier = Modifier.padding(bottom = 2.dp)
-                                        )
-                                    }
-                                    exchange.exchangeId?.let {
-                                        Text(
-                                            it,
-                                            modifier = Modifier.padding(bottom = 2.dp)
-                                        )
-                                    }
-                                    exchange.volume1DayUsd?.let {
-                                        Text(
-                                            "US$ $it",
-                                            modifier = Modifier.padding(bottom = 2.dp)
-                                        )
+                Scaffold(topBar = {
+                    TopAppBar(
+                        title = { Text(text = getString(R.string.app_name)) },
+                        scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+                        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.DarkGray)
+                    )
+                }) { padding ->
+                    if (exchangesState.isEmpty() && errorState == null){
+                        CircularProgressIndicator()
+                    }
+                    if (errorState == null) {
+                        LazyColumn(
+                            modifier = Modifier.padding(padding),
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            items(
+                                items = exchangesState
+                            ) { exchange ->
+                                Row(
+                                    modifier = Modifier
+                                        .background(MaterialTheme.colorScheme.background)
+                                        .fillParentMaxWidth()
+                                        .border(width = 1.dp, color = MaterialTheme.colorScheme.outline)
+                                ) {
+                                    Column(modifier = Modifier.padding(start = 4.dp)) {
+                                        exchange.name?.let {
+                                            Text(
+                                                it,
+                                                modifier = Modifier.padding(bottom = 2.dp)
+                                            )
+                                        }
+                                        exchange.exchangeId?.let {
+                                            Text(
+                                                it,
+                                                modifier = Modifier.padding(bottom = 2.dp)
+                                            )
+                                        }
+                                        exchange.volume1DayUsd?.let {
+                                            Text(
+                                                "US$ $it",
+                                                modifier = Modifier.padding(bottom = 2.dp)
+                                            )
+                                        }
                                     }
                                 }
+                            }
+                        }
+                    } else {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier
+                                .padding(padding)
+                                .fillMaxWidth(1f)
+                        ) {
+                            errorState?.message?.let {
+                                Text(
+                                    text = it
+                                )
+                            }
+                            Button(onClick = { viewModel.getExchangeList() }) {
+                                Text("Tentar novamente")
                             }
                         }
                     }
