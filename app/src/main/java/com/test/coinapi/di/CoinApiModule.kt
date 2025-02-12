@@ -6,7 +6,7 @@ import com.test.coinapi.data.repository.ExchangesRepositoryImpl
 import com.test.coinapi.data.source.ExchangesDataSource
 import com.test.coinapi.domain.repository.ExchangesRepository
 import com.test.coinapi.domain.usecase.GetExchangeListUseCase
-import com.test.coinapi.presentation.main.ExchangeViewModel
+import com.test.coinapi.presentation.main.MainScreenViewModel
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.koin.core.module.dsl.viewModel
@@ -68,7 +68,7 @@ val coinApiModule = module {
     }
 
     viewModel {
-        ExchangeViewModel(
+        MainScreenViewModel(
             getExchangeListUseCase = get()
         )
     }

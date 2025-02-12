@@ -11,6 +11,7 @@ composeBom = "2025.01.01"
 koinVersion = "4.0.2"
 retrofitVersion = "2.11.0"
 serializationVersion = "1.8.0"
+navigationVersion = "2.8.6"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -33,6 +34,7 @@ koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = 
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit" , version.ref = "retrofitVersion"}
 retrofit-converter = { group = "com.squareup.retrofit2", name = "converter-gson" , version.ref = "retrofitVersion"}
 kotlin-json-serialization = {group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serializationVersion" }
+navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

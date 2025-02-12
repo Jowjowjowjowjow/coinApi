@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 
-class ExchangeViewModel(
+class MainScreenViewModel(
     private val getExchangeListUseCase: GetExchangeListUseCase
 ) : ViewModel() {
 
