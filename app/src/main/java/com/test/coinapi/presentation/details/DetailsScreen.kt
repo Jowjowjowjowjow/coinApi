@@ -10,7 +10,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -30,11 +29,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
 import com.test.coinapi.domain.model.Exchange
-import com.test.coinapi.domain.model.Icon
 import com.test.coinapi.extensions.format
 import org.koin.androidx.compose.koinViewModel
 import java.math.BigDecimal
@@ -70,9 +67,10 @@ fun DetailsScreen(
         )
     } else {
         DetailsIdNotFoundContent(
-           onBackClick = {
-               navController.navigateUp()
-           }
+            hasPreviousBackStackEntry = navController.previousBackStackEntry != null,
+            onBackClick = {
+                navController.navigateUp()
+            }
         )
     }
 }
@@ -96,19 +94,17 @@ fun DetailsContent(
             },
             navigationIcon = {
                 if (hasPreviousBackStackEntry) {
-                        IconButton(onClick = { onBackClick() }) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Back"
-                            )
-                        }
-                } else {
-                    null
+                    IconButton(onClick = { onBackClick() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
                 }
             },
             scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
             colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.DarkGray),
-            )
+        )
     }) { padding ->
         Column(
             modifier = Modifier
@@ -272,12 +268,23 @@ fun DetailsScreenPreview() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailsIdNotFoundContent(
+    hasPreviousBackStackEntry: Boolean,
     onBackClick: () -> Unit
 ) {
     Scaffold(topBar = {
         TopAppBar(
             title = {
                 Text(text = "CoinApi Details")
+            },
+            navigationIcon = {
+                if (hasPreviousBackStackEntry) {
+                    IconButton(onClick = { onBackClick() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                }
             },
             scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
             colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.DarkGray)
@@ -293,10 +300,6 @@ fun DetailsIdNotFoundContent(
                 //TODO: Pegar texto das strings
                 text = "ExchangeId não encontrado"
             )
-            Button(onClick = { onBackClick() }) {
-                //TODO: Pegar texto das strings
-                Text("Voltar")
-            }
         }
     }
 }
@@ -304,6 +307,9 @@ fun DetailsIdNotFoundContent(
 @Preview
 @Composable
 fun DetailsIdNotFoundContentPreview() {
-    DetailsIdNotFoundContent(onBackClick = {})
+    DetailsIdNotFoundContent(
+        hasPreviousBackStackEntry = true,
+        onBackClick = {}
+    )
 }
 
