@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-val format = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'"
+const val format = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'"
 val locale = Locale("pt", "BR")
 
 fun String.toDate(): Date? {

@@ -1,16 +1,16 @@
 package com.test.coinapi.domain.usecase
 
 import com.google.gson.Gson
-import com.test.coinapi.data.model.ExchangeResponse
+import com.test.coinapi.data.model.IconResponse
 import com.test.coinapi.domain.repository.ExchangesRepository
 
-class GetExchangeListUseCase(
+class GetExchangesIconsUseCase(
     private val exchangesRepository: ExchangesRepository,
     private val gson: Gson
 ) {
 
-    suspend operator fun invoke(): Result<List<ExchangeResponse>?> {
-        val exchangeListResponse = exchangesRepository.getExchanges()
+    suspend operator fun invoke(): Result<List<IconResponse>?> {
+        val exchangeListResponse = exchangesRepository.getExchangesIcons()
 
         return if (exchangeListResponse.isSuccessful) {
             Result.success(exchangeListResponse.body())

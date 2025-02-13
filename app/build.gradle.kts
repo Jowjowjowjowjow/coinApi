@@ -83,6 +83,8 @@ dependencies {
     implementation(libs.retrofit.converter)
     implementation(libs.kotlin.json.serialization)
     implementation(libs.navigation.compose)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.http)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

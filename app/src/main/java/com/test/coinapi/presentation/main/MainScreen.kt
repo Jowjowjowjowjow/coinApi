@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.getString
@@ -47,12 +48,12 @@ fun MainScreen(
     })
 
     val exchangesState by viewModel.exchanges.collectAsStateWithLifecycle()
-    val errorState by viewModel.error.collectAsStateWithLifecycle()
+    val errorMessage by viewModel.errorMessage.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
     MainContent(
         exchangesState = exchangesState,
-        errorState = errorState,
+        errorMessage = errorMessage,
         topBarTitle = getString(context, R.string.app_name),
         tryAgainClick = {
             viewModel.getExchangeList()
@@ -67,7 +68,7 @@ fun MainScreen(
 @Composable
 fun MainContent(
     exchangesState: List<Exchange>,
-    errorState: Throwable?,
+    errorMessage: String?,
     topBarTitle: String,
     tryAgainClick: () -> Unit,
     navigateToDetails: (exchangeId: String?) -> Unit
@@ -82,7 +83,7 @@ fun MainContent(
 /*        if (exchangesState.isEmpty() && errorState == null) {
             CircularProgressIndicator()
         }*/
-        if (errorState == null) {
+        if (errorMessage == null) {
             LazyColumn(
                 modifier = Modifier.padding(padding),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -127,11 +128,11 @@ fun MainContent(
                     .padding(padding)
                     .fillMaxWidth(1f)
             ) {
-                errorState.message?.let {
-                    Text(
-                        text = it
-                    )
-                }
+                Text(
+                    text = errorMessage,
+                    modifier = Modifier.padding(start = 4.dp, end = 4.dp),
+                    textAlign = TextAlign.Center
+                )
                 Button(onClick = { tryAgainClick() }) {
                     //TODO: Pegar texto das strings
                     Text("Tentar novamente")
@@ -154,7 +155,7 @@ fun MainScreenPreview() {
                     rank = 1.0
                 )
             ),
-            errorState = null,
+            errorMessage = null,
             topBarTitle = "CoinApi",
             tryAgainClick = {},
             navigateToDetails = {}

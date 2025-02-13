@@ -28,7 +28,7 @@ data class ExchangeResponse(
 )
 
 data class IconResponse(
-    @SerialName("exchange_id") val exchangeId: String?,
-    @SerialName("asset_id") val assetId: String?,
-    @SerialName("url") val url: String?
+    @SerializedName("exchange_id") val exchangeId: String?,
+    @SerializedName("asset_id") val assetId: String?,
+    @SerializedName("url") val url: String?
 )

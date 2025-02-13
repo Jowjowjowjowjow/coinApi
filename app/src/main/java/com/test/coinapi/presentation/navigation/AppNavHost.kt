@@ -24,13 +24,16 @@ fun AppNavHost() {
         composable(
             NavigationItem.Details.route,
             arguments = listOf(
-                navArgument(exchangeIdArgument){
+                navArgument(exchangeIdArgument) {
                     type = NavType.StringType
                 }
             )
         ) { backStackEntry ->
             val exchangeId = backStackEntry.arguments?.getString(exchangeIdArgument)
-            DetailsScreen(navController = navController, exchangeId)
+            DetailsScreen(
+                navController = navController,
+                exchangeId = exchangeId
+            )
         }
     }
 }

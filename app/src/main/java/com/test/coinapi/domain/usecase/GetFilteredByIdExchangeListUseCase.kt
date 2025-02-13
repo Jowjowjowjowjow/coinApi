@@ -4,13 +4,13 @@ import com.google.gson.Gson
 import com.test.coinapi.data.model.ExchangeResponse
 import com.test.coinapi.domain.repository.ExchangesRepository
 
-class GetExchangeListUseCase(
+class GetFilteredByIdExchangeListUseCase(
     private val exchangesRepository: ExchangesRepository,
     private val gson: Gson
 ) {
 
-    suspend operator fun invoke(): Result<List<ExchangeResponse>?> {
-        val exchangeListResponse = exchangesRepository.getExchanges()
+    suspend operator fun invoke(exchangeId: String): Result<List<ExchangeResponse>?> {
+        val exchangeListResponse = exchangesRepository.getExchangesById(exchangeId = exchangeId)
 
         return if (exchangeListResponse.isSuccessful) {
             Result.success(exchangeListResponse.body())
