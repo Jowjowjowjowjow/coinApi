@@ -1,10 +1,8 @@
 package com.test.coinapi.domain.model
 
 import com.google.gson.annotations.SerializedName
-import kotlinx.serialization.SerialName
 import java.math.BigDecimal
 import java.util.Date
-
 
 data class Exchange(
     @SerializedName("exchange_id") val exchangeId: String? = null,
