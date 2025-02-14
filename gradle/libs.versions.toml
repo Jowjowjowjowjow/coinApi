@@ -13,6 +13,9 @@ retrofitVersion = "2.11.0"
 serializationVersion = "1.8.0"
 navigationVersion = "2.8.6"
 coilVersion = "3.1.0"
+mockKVersion = "1.13.12"
+kotlinTestVersion = "1.9.24"
+junitKtxVersion = "1.2.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -38,6 +41,9 @@ kotlin-json-serialization = {group = "org.jetbrains.kotlinx", name = "kotlinx-se
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationVersion" }
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coilVersion" }
 coil-http = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coilVersion" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockKVersion" }
+kotlinTest = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlinTestVersion" }
+junitKtx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtxVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
